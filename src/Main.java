@@ -16,58 +16,53 @@ import java.util.Scanner;
 
 
 public class Main {
+    static Scanner scannerInputData = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner scannerInputData = new Scanner(System.in);
-        int numberWorkers = 5;
-        List<Worker> listWorkers = new ArrayList<>();
+        final int CURRENT_DATE = 2023;
+        List<Employee> listEmployees = new ArrayList<>();
+        listEmployees.add(setInfoEmployee());
+        listEmployees.add(setInfoEmployee());
+        listEmployees.add(setInfoEmployee());
+        listEmployees.add(setInfoEmployee());
+        listEmployees.add(setInfoEmployee());
+        listEmployees.sort(Comparator.comparing(Employee::getSurName, String.CASE_INSENSITIVE_ORDER));
 
-        System.out.println("Enter data for 5 employees:");
-        for (int i = 0; i < numberWorkers; i++) {
-            System.out.println("Worker " + (i + 1) + ":");
-            System.out.print("FullName: ");
-            String fullName = scannerInputData.nextLine();
-            System.out.print("Position: ");
-            String position = scannerInputData.nextLine();
-            System.out.print("Year of employment: ");
-            int yearOfEmployment = 0;
-            try {
-                yearOfEmployment = Integer.parseInt(scannerInputData.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Помилка формату року!");
-                System.exit(0);
+        System.out.print("Enter the year of experience:");
+        int yearExperience = scannerInputData.nextInt();
+        System.out.println("Employees with more experience presented below");
+        for (int i = 0; i < listEmployees.size(); i++) {
+            if (getEmployeeWorkExperience(listEmployees, CURRENT_DATE, i) > yearExperience) {
+                System.out.println(listEmployees.get(i).getSurName());
             }
-            Worker newWorker = new Worker(fullName, position, yearOfEmployment);
-            listWorkers.add(newWorker);
         }
-
-        listWorkers.sort(Comparator.comparing(Worker::getFullName, String.CASE_INSENSITIVE_ORDER));
-        System.out.print("Введіть рік для перевірки стажу: ");
-        int searchYear = 0;
-        try {
-            searchYear = Integer.parseInt(scannerInputData.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Помилка формату року!");
-            System.exit(0);
-        }
-
-        System.out.println("Працівники зі стажем більше " + searchYear + ":");
-
-//        boolean foundWorkers = false;
-//
-//        for (Worker worker : listWorkers) {
-//            if (worker.getWorkExperience() > searchYear) {
-//                System.out.println(worker.getFullName());
-//                foundWorkers = true;
-//            }
-//        }
-//
-//        if (!foundWorkers) {
-//            System.out.println("Немає працівників зі стажем більше " + searchYear);
-//        }
-
-
 
     }
+
+    public static Employee setInfoEmployee() {
+        System.out.print("Name of employment: ");
+        String name = scannerInputData.nextLine();
+        System.out.print("Surname of employment: ");
+        String surName = scannerInputData.nextLine();
+        System.out.print("Middle name of employment: ");
+        String middleName = scannerInputData.nextLine();
+        System.out.print("Position: ");
+        String position = scannerInputData.nextLine();
+        System.out.print("Year of employment: ");
+        int yearOfEmployment = 0;
+        try {
+            yearOfEmployment = Integer.parseInt(scannerInputData.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("You entered wrong");
+            System.exit(0);
+        }
+        return new Employee(name, surName, middleName, position, yearOfEmployment);
+    }
+
+    public static int getEmployeeWorkExperience(List<Employee> listEmployees, int currentDate, int employeeNumber) {
+        int employeeWorkExperience;
+        return employeeWorkExperience = currentDate - listEmployees.get(employeeNumber).getYearOfEmployment();
+    }
+
 
 }
